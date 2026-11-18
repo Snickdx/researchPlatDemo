@@ -1,0 +1,48 @@
+{% extends "site-base.html" %}
+{% block title %}Publication tree · PubTree{% endblock %}
+{% block main_class %} app-main-wide{% endblock %}
+
+{% block page_content %}
+<h1>Publication tree</h1>
+<p>
+  Start from an author and walk publications through transitive coauthorship.
+  Default depth is {{ max_depth }}.
+</p>
+
+<form class="filter-form" method="get" action="{{ url_for('tree_view') }}">
+  <div class="filter-grid filter-grid-tree">
+    <div>
+      <label class="form-label" for="author_id">Root author</label>
+      <select class="form-select" id="author_id" name="author_id" required>
+        <option value="" disabled {% if not selected_author_id %}selected{% endif %}>Choose an author…</option>
+        {% for a in authors %}
+        <option value="{{ a.id }}" {% if selected_author_id == a.id %}selected{% endif %}>
+          {{ a.name }}{% if a.affiliation %} — {{ a.affiliation }}{% endif %}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label class="form-label" for="max_depth">Max depth</label>
+      <input class="form-control" type="number" id="max_depth" name="max_depth" value="{{ max_depth }}" min="0" max="8">
+    </div>
+  </div>
+  <div class="filter-actions">
+    <button class="btn btn-primary" type="submit">Build tree</button>
+  </div>
+</form>
+
+{% if tree_result %}
+  {% if not tree_result.ok %}
+  <div class="alert alert-danger" role="alert">{{ tree_result.error }}</div>
+  {% else %}
+  <section class="result-section">
+    <h2 class="result-heading">Tree</h2>
+    <div class="tree-panel">
+      {% from "partials/tree_macros.html" import render_node %}
+      {{ render_node(tree_result.tree) }}
+    </div>
+  </section>
+  {% endif %}
+{% endif %}
+{% endblock %}

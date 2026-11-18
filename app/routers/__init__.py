@@ -24,6 +24,7 @@ from . import (
     logout,
     server_config,
     research,
+    public_pages,
 )
 
 api_router.include_router(research.router)

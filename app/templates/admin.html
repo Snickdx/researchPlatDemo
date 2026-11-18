@@ -4,11 +4,11 @@
 {% block subpage_content %}
 <h1>Admin</h1>
 <p>
-  Review current assignments against hour caps and the remaining department budget through the API.
+  Manage the research API from OpenAPI docs, or use the public search and tree pages.
 </p>
 <div class="app-actions">
   <a href="/docs">Open API docs</a>
-  <a class="secondary" href="/api/assignments">Assignments</a>
-  <a class="secondary" href="/api/review">Review board</a>
+  <a class="secondary" href="{{ url_for('search_view') }}">Search</a>
+  <a class="secondary" href="{{ url_for('tree_view') }}">Publication tree</a>
 </div>
 {% endblock %}

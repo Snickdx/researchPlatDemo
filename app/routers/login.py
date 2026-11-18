@@ -33,7 +33,7 @@ async def login_action_ajax(
             status_code=status.HTTP_303_SEE_OTHER,
         )
 
-    user = user_repo.get_by_username(username)
+    user = user_repo.get_by_login(username)
     dest = "admin_home_view" if user and user.role == "admin" else "user_home_view"
     response = RedirectResponse(
         url=request.url_for(dest),

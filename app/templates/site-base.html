@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="app-shell">
+  <header class="app-topbar">
+    <a class="brand-wordmark" href="{{ url_for('index_view') }}">PubTree</a>
+    <nav class="app-topnav" aria-label="Primary">
+      <a class="{{ 'is-active' if request.url.path.startswith('/search') }}" href="{{ url_for('search_view') }}">Search</a>
+      <a class="{{ 'is-active' if request.url.path.startswith('/tree') }}" href="{{ url_for('tree_view') }}">Publication tree</a>
+      {% if user %}
+      {% if user.role == 'admin' %}
+      <a class="{{ 'is-active' if request.url.path.startswith('/admin') }}" href="{{ url_for('admin_home_view') }}">Admin</a>
+      {% else %}
+      <a class="{{ 'is-active' if request.url.path.startswith('/app') }}" href="{{ url_for('user_home_view') }}">Library</a>
+      {% endif %}
+      <a href="{{ url_for('logout') }}">Sign out</a>
+      <span>{{ user.username }}</span>
+      {% else %}
+      <a class="{{ 'is-active' if request.url.path.startswith('/login') }}" href="{{ url_for('login_view') }}">Sign in</a>
+      <a href="{{ url_for('register_view') }}">Join</a>
+      {% endif %}
+    </nav>
+  </header>
+  <main class="app-main{% block main_class %}{% endblock %}">
+    {% for message in get_flashed_messages(request) %}
+    <div class="alert alert-{{ message.type }}" role="alert">{{ message.message }}</div>
+    {% endfor %}
+    {% block page_content %}{% endblock %}
+  </main>
+</div>
+{% block page_scripts %}{% endblock %}
+{% endblock %}

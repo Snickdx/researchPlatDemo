@@ -23,17 +23,23 @@ def test_authenticate_user_returns_token_for_valid_credentials(monkeypatch):
     )
 
     class FakeUserRepository:
-        def get_by_username(self, username):
-            return user if username == "alice" else None
+        def get_by_login(self, login):
+            return user if login in ("alice", "alice@example.com") else None
 
     monkeypatch.setattr(
         "app.services.auth_service.create_access_token",
         lambda data: {"sub": data["sub"], "role": data["role"]},
     )
 
-    token = AuthService(FakeUserRepository()).authenticate_user("alice", "secret")
-
-    assert token == {"sub": "7", "role": "regular_user"}
+    service = AuthService(FakeUserRepository())
+    assert service.authenticate_user("alice", "secret") == {
+        "sub": "7",
+        "role": "regular_user",
+    }
+    assert service.authenticate_user("alice@example.com", "secret") == {
+        "sub": "7",
+        "role": "regular_user",
+    }
 
 
 def test_authenticate_user_returns_none_for_invalid_credentials():
@@ -45,8 +51,8 @@ def test_authenticate_user_returns_none_for_invalid_credentials():
     )
 
     class FakeUserRepository:
-        def get_by_username(self, username):
-            return user if username == "alice" else None
+        def get_by_login(self, login):
+            return user if login == "alice" else None
 
     service = AuthService(FakeUserRepository())
 

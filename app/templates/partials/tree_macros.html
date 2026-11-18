@@ -1,0 +1,39 @@
+{% macro render_node(node) -%}
+{% if node %}
+<ul class="tree-branch">
+  <li class="tree-node tree-node-{{ node.kind|default('unknown') }}">
+    {% if node.kind == 'author' %}
+    <div class="tree-label">
+      <span class="tree-kind">Author</span>
+      <strong>{{ node.name or ('#' ~ node.id) }}</strong>
+      {% if node.truncated %}<span class="tree-flag">truncated</span>{% endif %}
+    </div>
+    {% elif node.kind == 'publication' %}
+    <div class="tree-label">
+      <span class="tree-kind">Publication</span>
+      <strong>{{ node.title or ('#' ~ node.id) }}</strong>
+      {% if node.year %}<span class="tree-meta">{{ node.year }}</span>{% endif %}
+      {% if node.venue %}<span class="tree-meta">{{ node.venue }}</span>{% endif %}
+      {% if node.truncated %}<span class="tree-flag">truncated</span>{% endif %}
+    </div>
+    {% if node.coauthors %}
+    <p class="tree-coauthors">
+      {% for a in node.coauthors %}{{ a.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+    </p>
+    {% endif %}
+    {% else %}
+    <div class="tree-label">
+      <span class="tree-kind">{{ node.kind or 'node' }}</span>
+      <strong>#{{ node.id }}</strong>
+    </div>
+    {% endif %}
+
+    {% if node.children %}
+      {% for child in node.children %}
+        {{ render_node(child) }}
+      {% endfor %}
+    {% endif %}
+  </li>
+</ul>
+{% endif %}
+{%- endmacro %}

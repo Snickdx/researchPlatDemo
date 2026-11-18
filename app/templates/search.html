@@ -1,0 +1,57 @@
+{% extends "site-base.html" %}
+{% block title %}Search · PubTree{% endblock %}
+
+{% block page_content %}
+<h1>Publication search</h1>
+<p>Filter the corpus by title, author, year, and venue. No sign-in required.</p>
+
+<form class="filter-form" method="get" action="{{ url_for('search_view') }}">
+  <div class="filter-grid">
+    <div>
+      <label class="form-label" for="title">Title</label>
+      <input class="form-control" type="text" id="title" name="title" value="{{ filters.title }}" placeholder="e.g. graph">
+    </div>
+    <div>
+      <label class="form-label" for="author">Author</label>
+      <input class="form-control" type="text" id="author" name="author" value="{{ filters.author }}" placeholder="e.g. Ada">
+    </div>
+    <div>
+      <label class="form-label" for="year">Year</label>
+      <input class="form-control" type="number" id="year" name="year" value="{{ filters.year }}" min="1900" max="2100" placeholder="2023">
+    </div>
+    <div>
+      <label class="form-label" for="venue">Venue</label>
+      <input class="form-control" type="text" id="venue" name="venue" value="{{ filters.venue }}" placeholder="e.g. Workshop">
+    </div>
+  </div>
+  <div class="filter-actions">
+    <button class="btn btn-primary" type="submit">Search</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('search_view') }}">Clear</a>
+  </div>
+</form>
+
+{% if queried %}
+<section class="result-section" aria-live="polite">
+  <h2 class="result-heading">{{ results|length }} result{% if results|length != 1 %}s{% endif %}</h2>
+  {% if results %}
+  <ul class="result-list">
+    {% for pub in results %}
+    <li class="result-card">
+      <h3>{{ pub.title }}</h3>
+      <p class="result-meta">{{ pub.year }}{% if pub.venue %} · {{ pub.venue }}{% endif %}</p>
+      <p class="result-coauthors">
+        {% for a in pub.coauthors %}
+        <a href="{{ url_for('tree_view') }}?author_id={{ a.id }}">{{ a.name }}</a>{% if not loop.last %}, {% endif %}
+        {% else %}
+        <span class="muted">No coauthors listed</span>
+        {% endfor %}
+      </p>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted">No publications matched those filters.</p>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}
