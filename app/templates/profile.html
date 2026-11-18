@@ -1,0 +1,28 @@
+{% extends "site-base.html" %}
+{% block title %}My profile · PubTree{% endblock %}
+
+{% block page_content %}
+<h1>Author profile</h1>
+<p>Update the public author profile linked to your account (matched by email).</p>
+
+<form class="profile-form" method="post" action="{{ url_for('profile_action') }}">
+  <div class="mb-3">
+    <label class="form-label" for="name">Display name</label>
+    <input class="form-control" type="text" id="name" name="name" value="{{ profile.name }}" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="email">Email</label>
+    <input class="form-control" type="email" id="email" name="email" value="{{ profile.email }}" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="affiliation">Affiliation</label>
+    <input class="form-control" type="text" id="affiliation" name="affiliation" value="{{ profile.affiliation or '' }}" placeholder="e.g. DCIT">
+  </div>
+  <div class="filter-actions">
+    <button class="btn btn-primary" type="submit">Save profile</button>
+    {% if profile.id %}
+    <a class="btn btn-outline-secondary" href="{{ url_for('tree_view') }}?author_id={{ profile.id }}">View my tree</a>
+    {% endif %}
+  </div>
+</form>
+{% endblock %}

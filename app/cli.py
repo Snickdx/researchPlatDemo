@@ -52,8 +52,9 @@ def cmd_seed(args: argparse.Namespace) -> None:
 
     _ensure_models_loaded()
     seed(reset=False)
-    print("Seed done — admin, authors, and coauthored publications.")
-    print("API login: admin@example.com / admin-dev")
+    print("Seed done — admin, authors, author logins, and coauthored publications.")
+    print("Admin login: admin@example.com / admin-dev")
+    print("Author login: ada@example.com / author-dev (also ben/cai/dee)")
 
 
 def cmd_run(args: argparse.Namespace) -> None:

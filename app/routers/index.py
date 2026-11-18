@@ -18,7 +18,7 @@ async def index_view(
         if await is_admin(user):
             app_home = request.url_for("admin_home_view")
         else:
-            app_home = request.url_for("user_home_view")
+            app_home = request.url_for("profile_view")
 
     return templates.TemplateResponse(
         request=request,

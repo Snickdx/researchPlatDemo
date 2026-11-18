@@ -15,10 +15,10 @@
       <a class="btn-landing btn-landing-ghost" href="{{ url_for('search_view') }}">Search</a>
       <a class="btn-landing btn-landing-ghost" href="{{ url_for('tree_view') }}">Publication tree</a>
       {% if user_logged_in %}
+      <a class="btn-landing btn-landing-ghost" href="{{ url_for('profile_view') }}">My profile</a>
       <a class="btn-landing btn-landing-primary" href="{{ app_home }}">Open library</a>
-      <a class="btn-landing btn-landing-ghost" href="{{ url_for('logout') }}">Sign out</a>
       {% else %}
-      <a class="btn-landing btn-landing-ghost" href="{{ url_for('login_view') }}">Sign in</a>
+      <a class="btn-landing btn-landing-ghost" href="{{ url_for('login_view') }}">Author sign in</a>
       <a class="btn-landing btn-landing-primary" href="{{ url_for('register_view') }}">Join</a>
       {% endif %}
     </nav>
@@ -28,24 +28,24 @@
     <p class="landing-kicker">Research publications</p>
     <h1 class="brand-wordmark">PubTree</h1>
     <p class="landing-lead">
-      Search the corpus and walk transitive coauthorship trees from any researcher.
+      Search the corpus, walk coauthorship trees, and manage your author profile after you sign in.
     </p>
     <ul class="landing-spec" aria-label="Capabilities">
       <li>Publication search</li>
       <li>Publication trees</li>
-      <li>Coauthor graphs</li>
+      <li>Author profiles</li>
     </ul>
     <div class="landing-cta">
       <a class="btn-landing btn-landing-primary" href="{{ url_for('search_view') }}">Search publications</a>
       <a class="btn-landing btn-landing-ghost" href="{{ url_for('tree_view') }}">Explore a tree</a>
       {% if not user_logged_in %}
-      <a class="btn-landing btn-landing-ghost" href="{{ url_for('login_view') }}">Sign in</a>
+      <a class="btn-landing btn-landing-ghost" href="{{ url_for('login_view') }}">Author sign in</a>
       {% endif %}
     </div>
   </main>
 
   <footer class="landing-foot">
-    After <code>python manage.py init</code>: admin@example.com / admin-dev
+    Seeded author logins: ada@example.com / author-dev · admin@example.com / admin-dev
   </footer>
 </div>
 {% endblock %}

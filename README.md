@@ -24,10 +24,12 @@ Open http://127.0.0.1:5000 — SSR auth shell; scenario JSON under `/api` and Op
 
 | Feature | Route | Notes |
 | --- | --- | --- |
-| Landing | `/` | Nav to search, publication tree, and sign-in |
+| Landing | `/` | Nav to search, publication tree, and author sign-in |
 | Publication search | `/search` | Public filters: title, author, year, venue |
 | Publication tree | `/tree` | Public; pick a root author and max depth |
-| Sign-in / register | `/login`, `/register` | Username **or** email → JWT cookie |
+| Author sign-in | `/login` | Username **or** email → JWT cookie; authors land on profile |
+| Register | `/register` | Creates a user + linked author profile |
+| Author profile | `/profile` | Edit display name, email, affiliation (login required) |
 | Logout | `/logout` | Clears session cookie |
 | Password hashing | — | Argon2id; login responses omit password material |
 
@@ -48,16 +50,18 @@ Demo auth: `POST /api/auth/login` with `{email, password}`, then send `X-User-Id
 | Login | Password | Role |
 | --- | --- | --- |
 | `admin` / `admin@example.com` | `admin-dev` | admin |
+| `ada` / `ada@example.com` (also ben, cai, dee) | `author-dev` | regular_user + author profile |
 
-Seeded authors: Ada Okonkwo, Ben Rivera, Cai Chen, Dee Singh — with a small coauthorship graph for the publication tree.
+Seeded authors: Ada Okonkwo, Ben Rivera, Cai Chen, Dee Singh — with a small coauthorship graph for the publication tree. Author profiles are linked to user accounts by email.
 
 ### Not properly implemented yet
 
-- **Author profile edit UI** (Req 1 — see branch `1-implement-r1`)
 - **Publication tree semantics** (API and SSR share the flawed starter walker: default depth / visited handling)
 - **Admin-only API tree** still requires `X-User-Id` of an admin; the public `/tree` page does not
 - **`/config` ops panel** disabled unless `CONFIG_PASSWORD` is set
 - PDF upload, citation metrics, and ORCID sync are out of graded MVP
+
+This branch (`1-implement-r1`) implements **Req 1 — author profiles** on top of `main`.
 
 ## Student brief
 
