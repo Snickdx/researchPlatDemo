@@ -1,4 +1,4 @@
-"""Seed admin user and a small coauthorship graph for PubTree demos."""
+"""Seed admin user, author logins, and a small coauthorship graph for PubTree demos."""
 
 from __future__ import annotations
 
@@ -9,6 +9,15 @@ from app.models.author import Author
 from app.models.publication import Publication, PublicationAuthor
 from app.models.user import User
 from app.utilities.security import encrypt_password
+
+AUTHOR_SEED_PASSWORD = "author-dev"
+
+_AUTHOR_USERS = (
+    ("ada", "ada@example.com", "Ada Okonkwo", "DCIT"),
+    ("ben", "ben@example.com", "Ben Rivera", "DCIT"),
+    ("cai", "cai@example.com", "Cai Chen", "Math"),
+    ("dee", "dee@example.com", "Dee Singh", "Library"),
+)
 
 
 def seed(*, reset: bool = False) -> None:
@@ -22,43 +31,48 @@ def seed(*, reset: bool = False) -> None:
     ensure_db_and_tables()
 
     with Session(engine) as session:
-        if session.exec(select(User)).first() is not None:
+        admin = session.exec(select(User).where(User.username == "admin")).first()
+        if admin is None:
+            session.add(
+                User(
+                    username="admin",
+                    email="admin@example.com",
+                    password=encrypt_password("admin-dev"),
+                    role="admin",
+                )
+            )
+            session.commit()
+
+        authors_by_email: dict[str, Author] = {}
+        for username, email, name, affiliation in _AUTHOR_USERS:
+            author = session.exec(select(Author).where(Author.email == email)).first()
+            if author is None:
+                author = Author(name=name, affiliation=affiliation, email=email)
+                session.add(author)
+                session.commit()
+                session.refresh(author)
+
+            user = session.exec(select(User).where(User.email == email)).first()
+            if user is None:
+                session.add(
+                    User(
+                        username=username,
+                        email=email,
+                        password=encrypt_password(AUTHOR_SEED_PASSWORD),
+                        role="regular_user",
+                    )
+                )
+                session.commit()
+
+            authors_by_email[email] = author
+
+        if session.exec(select(Publication)).first() is not None:
             return
 
-        session.add(
-            User(
-                username="admin",
-                email="admin@example.com",
-                password=encrypt_password("admin-dev"),
-                role="admin",
-            )
-        )
-
-        ada = Author(
-            name="Ada Okonkwo",
-            affiliation="DCIT",
-            email="ada@example.com",
-        )
-        ben = Author(
-            name="Ben Rivera",
-            affiliation="DCIT",
-            email="ben@example.com",
-        )
-        cai = Author(
-            name="Cai Chen",
-            affiliation="Math",
-            email="cai@example.com",
-        )
-        dee = Author(
-            name="Dee Singh",
-            affiliation="Library",
-            email="dee@example.com",
-        )
-        session.add(ada)
-        session.add(ben)
-        session.add(cai)
-        session.add(dee)
-        session.commit()
+        ada = authors_by_email["ada@example.com"]
+        ben = authors_by_email["ben@example.com"]
+        cai = authors_by_email["cai@example.com"]
+        dee = authors_by_email["dee@example.com"]
 
         # Graph:
         #   Ada+Ben → Patterns in SE

@@ -8,6 +8,7 @@
       <a class="{{ 'is-active' if request.url.path.startswith('/search') }}" href="{{ url_for('search_view') }}">Search</a>
       <a class="{{ 'is-active' if request.url.path.startswith('/tree') }}" href="{{ url_for('tree_view') }}">Publication tree</a>
       {% if user %}
+      <a class="{{ 'is-active' if request.url.path.startswith('/profile') }}" href="{{ url_for('profile_view') }}">My profile</a>
       {% if user.role == 'admin' %}
       <a class="{{ 'is-active' if request.url.path.startswith('/admin') }}" href="{{ url_for('admin_home_view') }}">Admin</a>
       {% else %}
@@ -16,7 +17,7 @@
       <a href="{{ url_for('logout') }}">Sign out</a>
       <span>{{ user.username }}</span>
       {% else %}
-      <a class="{{ 'is-active' if request.url.path.startswith('/login') }}" href="{{ url_for('login_view') }}">Sign in</a>
+      <a class="{{ 'is-active' if request.url.path.startswith('/login') }}" href="{{ url_for('login_view') }}">Author sign in</a>
       <a href="{{ url_for('register_view') }}">Join</a>
       {% endif %}
     </nav>

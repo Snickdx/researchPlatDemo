@@ -25,6 +25,7 @@ from . import (
     server_config,
     research,
     public_pages,
+    author_profile,
 )
 
 api_router.include_router(research.router)

@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Sign in · PubTree{% endblock %}
+{% block title %}Author sign in · PubTree{% endblock %}
 
 {% block content %}
 <div class="auth-shell">
   <div class="auth-panel">
     <a class="auth-back" href="{{ url_for('index_view') }}">← PubTree</a>
     <div class="brand-wordmark">PubTree</div>
-    <p class="auth-tagline">Sign in to continue</p>
+    <p class="auth-tagline">Author sign in</p>
 
     <form method="POST" action="{{ url_for('login_action_ajax') }}">
       <div class="mb-3">
@@ -19,9 +19,11 @@
       </div>
       <div class="d-grid gap-2 mb-3">
         <button class="btn btn-primary btn-lg" type="submit">Sign in</button>
-        <a class="btn btn-outline-secondary" href="{{ url_for('register_view') }}">Create an account</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('register_view') }}">Create an author account</a>
       </div>
     </form>
+
+    <p class="auth-hint">After sign-in you can edit your author profile. Public search and trees need no login.</p>
 
     {% for message in get_flashed_messages(request) %}
     <div class="alert alert-{{ message.type }} mb-0" role="alert">{{ message.message }}</div>

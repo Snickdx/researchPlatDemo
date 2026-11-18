@@ -4,11 +4,12 @@
 {% block subpage_content %}
 <h1>Research library</h1>
 <p>
-  Browse public search and coauthorship trees, or explore the research JSON API.
+  Browse public search and coauthorship trees, or update the author profile linked to your account.
 </p>
 <div class="app-actions">
   <a href="{{ url_for('search_view') }}">Search</a>
   <a class="secondary" href="{{ url_for('tree_view') }}">Publication tree</a>
+  <a class="secondary" href="{{ url_for('profile_view') }}">My profile</a>
   <a class="secondary" href="/docs">API docs</a>
 </div>
 {% endblock %}
